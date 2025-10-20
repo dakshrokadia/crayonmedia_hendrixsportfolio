@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail</title>
+    
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #333333; /* Dark Gray Background */
+            color: #FFFFFF; /* White Text */
+            font-family: Arial, Helvetica, sans-serif; /* Basic Font */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        /* Header/Navigation */
+        header {
+            border-bottom: 1px solid #555555;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: #AAAAAA;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* --- Project Detail Page (project.html) Gallery Grid --- */
+        .project-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-detail-description {
+            margin-top: 15px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #555555;
+        }
+
+        .main-project-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .gallery-grid {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="collection.html" class="back-link" id="back-link">&larr; Back to Collection</a>
+    </header>
+
+    <main class="project-detail-container">
+        <h1 id="project-title" class="project-detail-title">Loading Project Title...</h1>
+        
+        <img id="main-image" src="" alt="Main Project Image" class="main-project-image">
+        
+        <p id="project-description" class="project-detail-description">Loading project description...</p>
+        
+        <h2>Project Gallery</h2>
+        <div class="gallery-grid" id="gallery-container">
+            <p>Loading gallery images...</p>
+        </div>
+    </main>
+    
+    <template id="gallery-image-template">
+        <img src="" alt="Gallery Image" class="gallery-image">
+    </template>
+    
+    <script src="script.js"></script>
+</body>
+</html>

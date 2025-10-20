@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hendrix Portfolio MVP - Home</title>
+    
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #333333; /* Dark Gray Background */
+            color: #FFFFFF; /* White Text */
+            font-family: Arial, Helvetica, sans-serif; /* Basic Font */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        /* Header/Navigation */
+        header {
+            border-bottom: 1px solid #555555;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Homepage (index.html) Collection Grid --- */
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .collection-box {
+            background-color: #111111; /* Black box */
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid #555555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+            transition: background-color 0.2s;
+        }
+
+        .collection-box:hover {
+            background-color: #222222;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hendrix Portfolio</h1>
+    </header>
+
+    <main>
+        <div class="collection-grid" id="collection-list-container">
+            <h2>Loading Collections...</h2>
+        </div>
+    </main>
+    
+    <template id="collection-box-template">
+        <a href="#" class="collection-box collection-link">
+            <h2 class="collection-title"></h2>
+        </a>
+    </template>
+    
+    <script src="script.js"></script>
+</body>
+</html>

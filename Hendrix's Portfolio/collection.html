@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Page</title>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+        
+        <h1 class="collection-page-title">Loading Collection...</h1>
+    </header>
+
+    <main class="project-grid" id="project-list-container">
+        <p>Fetching projects for this collection...</p>
+    </main>
+    
+    <template id="project-card-template">
+        <div class="project-card" data-project-slug="">
+            <a href="project.html" class="project-link">
+                <img src="" alt="Placeholder Project" class="project-image">
+                
+                <div class="project-info">
+                    <h3 class="project-title"></h3>
+                    <p class="project-date"></p>
+                </div>
+            </a>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
