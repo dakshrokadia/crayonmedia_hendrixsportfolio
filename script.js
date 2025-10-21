@@ -36,9 +36,6 @@ async function fetchCollectionDetails(slug) {
     // We encode the slug to make sure it's safe for a URL.
     const encodedSlug = encodeURIComponent(slug);
     
-    // --- FIX: The 'collection' table does not have a 'description' column. ---
-    // I've removed 'description' from the 'select' query to prevent the 400 error.
-    // We're now only asking for the 'title' and 'id' columns, which exist.
     const collectionUrl = `${SUPABASE_API_BASE}collection?slug=eq.${encodedSlug}&select=title,id`; 
     
     const collectionResponse = await fetch(collectionUrl, fetchOptions);
@@ -60,7 +57,6 @@ async function fetchCollectionDetails(slug) {
     const collectionId = collectionData[0].id; 
     
     // Now, fetch all the projects that belong to this collection using its ID.
-    // We're asking for specific columns from the 'project' table.
     const projectsUrl = `${SUPABASE_API_BASE}project?collection_id=eq.${collectionId}&order=date_completed.desc&select=title,slug,date_completed,main_image_url`;
     
     const projectsResponse = await fetch(projectsUrl, fetchOptions);
@@ -76,8 +72,6 @@ async function fetchCollectionDetails(slug) {
         title: collectionTitle,
         id: collectionId,
         projects: projectsData.map(p => ({
-            // The database uses snake_case (e.g., date_completed), but JavaScript
-            // usually uses camelCase (e.g., dateCompleted). We map them here.
             title: p.title,
             slug: p.slug,
             dateCompleted: p.date_completed,
@@ -115,11 +109,13 @@ async function fetchAllCollections() {
 async function fetchProjectDetails(slug) {
     const encodedSlug = encodeURIComponent(slug);
     
-    // This query gets all the main details for one project.
-    const projectUrl = `${SUPABASE_API_BASE}project?slug=eq.${encodedSlug}&select=title,description,main_image_url,gallery_images,collection_id`;
+    // FIX: Removed 'gallery_images' from the select query to prevent API failure.
+    // We only request the new 'gallery_links_raw' column now.
+    const projectUrl = `${SUPABASE_API_BASE}project?slug=eq.${encodedSlug}&select=title,description,main_image_url,collection_id,gallery_links_raw`;
     
     const response = await fetch(projectUrl, fetchOptions);
     if (!response.ok) {
+        // This will now only fail if 'project_links_raw' is also missing, or a real connection error occurs.
         throw new Error(`Project details fetch failed with status: ${response.status}`);
     }
     
@@ -135,12 +131,28 @@ async function fetchProjectDetails(slug) {
     if (collectionData && collectionData.length > 0) {
         project.collectionSlug = collectionData[0].slug;
     }
+    
+    // --- NEW LOGIC FOR GALLERY IMAGES ---
+    // Since 'gallery_images' is now deleted, we initialize to undefined.
+    let galleryImageUrls; 
+    
+    // Check if the new, easy-to-edit raw string column has data.
+    if (project.gallery_links_raw) {
+        // Automatically split the raw string by new lines (and commas, just in case),
+        // trim whitespace, and filter out any empty entries.
+        galleryImageUrls = project.gallery_links_raw.split(/[\n,]/)
+                                                    .map(link => link.trim())
+                                                    .filter(link => link.length > 0);
+    }
+    // Note: If galleryImageUrls is undefined here, loadProjectPage handles it by defaulting to [].
+    // --- END NEW LOGIC ---
 
     // Map the database names to our JavaScript names, just like before.
     return {
         ...project,
         mainImageURL: project.main_image_url,
-        galleryImages: project.gallery_images,
+        // Use the parsed array (or undefined, which loadProjectPage handles)
+        galleryImages: galleryImageUrls, 
     };
 }
 
@@ -290,7 +302,7 @@ async function loadProjectPage() {
         if (galleryContainer && galleryTemplate) {
             galleryContainer.innerHTML = ''; // Clear the placeholder
 
-            // The 'gallery_images' column is a JSON array of URLs in Supabase.
+            // Now uses the combined/parsed array from fetchProjectDetails
             const galleryImages = project.galleryImages || []; 
 
             if (galleryImages.length > 0) {
@@ -302,7 +314,7 @@ async function loadProjectPage() {
                     galleryContainer.appendChild(imgElement);
                 });
             } else {
-                galleryContainer.innerHTML = '<p>No gallery images available.</p>';
+                galleryContainer.innerHTML = '<p class="text-gray-500 italic">No gallery images available.</p>';
             }
         }
         
