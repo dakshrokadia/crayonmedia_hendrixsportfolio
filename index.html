@@ -3,72 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hendrix Portfolio MVP - Home</title>
-    
+    <title>Hendrix's Portfolio - Collections</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Global Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
-            background-color: #333333; /* Dark Gray Background */
-            color: #FFFFFF; /* White Text */
-            font-family: Arial, Helvetica, sans-serif; /* Basic Font */
-            margin: 0;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark Gray 900 */
         }
-
-        h1, h2, h3, p {
-            margin: 0;
-        }
-
-        /* Header/Navigation */
-        header {
-            border-bottom: 1px solid #555555;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* --- Homepage (index.html) Collection Grid --- */
-        .collection-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .collection-box {
-            background-color: #111111; /* Black box */
-            color: #FFFFFF;
-            text-decoration: none;
-            padding: 40px 20px;
-            text-align: center;
-            border: 1px solid #555555;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 150px;
-            transition: background-color 0.2s;
-        }
-
-        .collection-box:hover {
-            background-color: #222222;
+        /* Custom styles to ensure full page dark background */
+        .page-container {
+            min-height: 100vh;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Hendrix Portfolio</h1>
+<body class="text-white">
+
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">
+                <a href="index.html" class="hover:text-cyan-400 transition duration-300">HENDRIX PORTFOLIO</a>
+            </h1>
+            <nav>
+                <a href="index.html" class="text-lg font-medium text-cyan-400 hover:text-white transition duration-300">Collections</a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <div class="collection-grid" id="collection-list-container">
-            <h2>Loading Collections...</h2>
+    <!-- Main Content Container -->
+    <main class="page-container max-w-7xl mx-auto p-6 pt-12">
+        <h2 class="text-5xl font-extrabold mb-10 border-b border-gray-700 pb-3">Project Collections</h2>
+        
+        <!-- Collection List Container -->
+        <div id="collection-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Placeholder -->
+            <h3 class="col-span-full text-gray-500 text-xl font-semibold">Loading Collections...</h3>
         </div>
     </main>
-    
+
+    <!-- Template for Collection Boxes -->
     <template id="collection-box-template">
-        <a href="#" class="collection-box collection-link">
-            <h2 class="collection-title"></h2>
+        <a href="#" class="collection-box block bg-gray-800 hover:bg-gray-700 transition duration-300 shadow-xl p-8 border border-gray-700">
+            <h3 class="collection-title text-3xl font-bold mb-2">Collection Title</h3>
+            <p class="text-cyan-400 text-sm font-medium">View Projects &rarr;</p>
         </a>
     </template>
-    
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-6 py-4 text-center text-gray-400">
+            &copy; 2025 Hendrix Portfolio. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Load the main application script -->
     <script src="script.js"></script>
 </body>
 </html>

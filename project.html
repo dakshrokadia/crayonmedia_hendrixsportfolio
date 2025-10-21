@@ -3,92 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Detail</title>
-    
+    <title>Project Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Global Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body {
-            background-color: #333333; /* Dark Gray Background */
-            color: #FFFFFF; /* White Text */
-            font-family: Arial, Helvetica, sans-serif; /* Basic Font */
-            margin: 0;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark Gray 900 */
         }
-
-        h1, h2, h3, p {
-            margin: 0;
+        .page-container {
+            min-height: 100vh;
         }
-
-        /* Header/Navigation */
-        header {
-            border-bottom: 1px solid #555555;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+        /* Custom aspect ratio for gallery images */
+        .gallery-image-wrapper {
+            padding-bottom: 75%; /* 4:3 Aspect Ratio */
+            position: relative;
+            overflow: hidden;
+            background-color: #374151; /* Gray 700 */
         }
-
-        .back-link {
-            color: #AAAAAA;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        /* --- Project Detail Page (project.html) Gallery Grid --- */
-        .project-detail-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .project-detail-description {
-            margin-top: 15px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #555555;
-        }
-
-        .main-project-image {
+        .gallery-image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .gallery-grid {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 10px;
-        }
-
-        .gallery-image {
-            width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
             object-fit: cover;
         }
     </style>
 </head>
-<body>
-    <header>
-        <a href="collection.html" class="back-link" id="back-link">&larr; Back to Collection</a>
+<body class="text-white">
+
+    <!-- Header (Matching Homepage Style) -->
+    <header class="bg-gray-800 shadow-lg border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold tracking-tight">
+                <a href="index.html" class="hover:text-cyan-400 transition duration-300">HENDRIX PORTFOLIO</a>
+            </h1>
+            <nav>
+                <a href="index.html" class="text-lg font-medium text-cyan-400 hover:text-white transition duration-300">Collections</a>
+            </nav>
+        </div>
     </header>
 
-    <main class="project-detail-container">
-        <h1 id="project-title" class="project-detail-title">Loading Project Title...</h1>
+    <!-- Main Content Container (Matching Homepage Style) -->
+    <main class="page-container max-w-7xl mx-auto p-6 pt-12">
+
+        <!-- Back Link -->
+        <a id="back-link" href="index.html" class="text-cyan-400 hover:text-white transition duration-300 mb-6 inline-block text-sm font-medium">&larr; Back to Collection</a>
+
+        <!-- Project Title -->
+        <h2 id="project-title" class="text-5xl font-extrabold mb-6 border-b border-gray-700 pb-3">Loading Project...</h2>
+
+        <!-- Main Image -->
+        <div class="w-full bg-gray-700 shadow-xl mb-10 border border-gray-700">
+            <img id="main-image" src="https://placehold.co/1200x600/1f2937/d1d5db?text=MAIN+PROJECT+IMAGE" alt="Main Project Image" class="w-full h-auto object-cover">
+        </div>
+
+        <!-- Project Description -->
+        <p id="project-description" class="text-gray-300 text-lg mb-12 max-w-4xl">
+            Description will load here.
+        </p>
+
+        <!-- Gallery Section -->
+        <h3 class="text-4xl font-extrabold mb-8 border-b border-gray-700 pb-3">Project Gallery</h3>
         
-        <img id="main-image" src="" alt="Main Project Image" class="main-project-image">
-        
-        <p id="project-description" class="project-detail-description">Loading project description...</p>
-        
-        <h2>Project Gallery</h2>
-        <div class="gallery-grid" id="gallery-container">
-            <p>Loading gallery images...</p>
+        <!-- Grid Container: Two Columns on Medium/Large Screens -->
+        <div id="gallery-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Gallery images will be injected here by script.js -->
+            <p class="text-gray-500 italic">Loading gallery images...</p>
         </div>
     </main>
-    
+
+    <!-- Template for Gallery Images (Unrounded) -->
     <template id="gallery-image-template">
-        <img src="" alt="Gallery Image" class="gallery-image">
+        <div class="gallery-image-wrapper border border-gray-700 shadow-lg">
+            <img src="" alt="Gallery Image" class="w-full h-full object-cover">
+        </div>
     </template>
-    
+
+    <!-- Footer (Matching Homepage Style) -->
+    <footer class="bg-gray-800 border-t border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-6 py-4 text-center text-gray-400">
+            &copy; 2025 Hendrix Portfolio. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Load the main application script -->
     <script src="script.js"></script>
 </body>
 </html>
