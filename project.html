@@ -1,94 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Nov 11 2025 08:34:41 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="68fdefaef7a9ab1b2e6c2523" data-wf-site="68fa9d04f30921742342ac3a">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Details</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark Gray 900 */
+  <meta charset="utf-8">
+  <title>Project</title>
+  <meta content="Project" property="og:title">
+  <meta content="Project" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/hendrixs-portfolio.webflow.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">
+      WebFont.load({
+        google: {
+          families: ["Merriweather:300,300italic,400,400italic,700,700italic,900,900italic"]
         }
-        .page-container {
-            min-height: 100vh;
-        }
-        /* Custom aspect ratio for gallery images */
-        .gallery-image-wrapper {
-            padding-bottom: 75%; /* 4:3 Aspect Ratio */
-            position: relative;
-            overflow: hidden;
-            background-color: #374151; /* Gray 700 */
-        }
-        .gallery-image-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+      });
+    </script>
+  <script type="text/javascript">
+      ! function(o, c) {
+        var n = c.documentElement,
+          t = " w-mod-";
+        n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
+      }(window, document);
+    </script>
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="images/webclip.ico" rel="apple-touch-icon">
+  <!-- CSS for Gallery & Skeleton Loader -->
+  <style>
+    .gallery-gtid .gallery-item.is-landscape {
+      grid-column: span 2;
+    }
+    .is-skeleton {
+      background: #2e2e2e !important; /* !important to override hero background */
+      color: transparent !important;
+      user-select: none;
+      animation: pulse 1.5s infinite ease-in-out;
+      border-radius: 4px;
+    }
+    .is-skeleton img, .hero-background.is-skeleton * {
+        opacity: 0;
+    }
+    .projects-hero-heading.is-skeleton, .projects-hero-date.is-skeleton {
+        min-height: 1em; /* Ensure it takes up space */
+        width: 60%;
+    }
+    .projects-hero-date.is-skeleton {
+        width: 40%;
+    }
+    @keyframes pulse {
+      0% { background-color: #2e2e2e; }
+      50% { background-color: #383838; }
+      100% { background-color: #2e2e2e; }
+    }
+  </style>
 </head>
-<body class="text-white">
-
-    <!-- Header (Matching Homepage Style) -->
-    <header class="bg-gray-800 shadow-lg border-b border-gray-700">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-3xl font-extrabold tracking-tight">
-                <a href="index.html" class="hover:text-cyan-400 transition duration-300">HENDRIX PORTFOLIO</a>
-            </h1>
-            <nav>
-                <a href="index.html" class="text-lg font-medium text-cyan-400 hover:text-white transition duration-300">Collections</a>
-            </nav>
+<body class="project-body">
+  <div data-animation="default" data-collapse="none" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="main-navbar w-nav">
+    <div class="navbar-container navbar-project-or w-container">
+      <a href="index.html" class="nav-link w-nav-link">Hendrix&#x27;s Portfolio</a>
+      <nav role="navigation" class="w-nav-menu">
+        <a href="contact.html" class="nav-link w-nav-link">Contact</a>
+      </nav>
+      <div class="w-nav-button">
+        <div class="w-icon-nav-menu"></div>
+      </div>
+    </div>
+  </div>
+  <section class="projects-hero-section">
+    <div class="projects-hero-max-width">
+      <div class="hero-background">
+        <div class="projects-hero-text-container">
+          <h1 class="projects-hero-heading is-skeleton">Project Title</h1>
+          <p class="projects-hero-date is-skeleton">Project Date</p>
         </div>
-    </header>
+      </div>
+    </div>
+  </section>
+  <section class="gallery-section">
+    <div id="gallery-container" class="w-layout-grid gallery-gtid">
+      <!-- Skeleton Loaders -->
+      <div class="gallery-item is-skeleton"><img src="" alt="" class="gallery-image"></div>
+      <div class="gallery-item is-skeleton is-landscape"><img src="" alt="" class="gallery-image"></div>
+      <div class="gallery-item is-skeleton"><img src="" alt="" class="gallery-image"></div>
+      <div class="gallery-item is-skeleton"><img src="" alt="" class="gallery-image"></div>
+      <div class="gallery-item is-skeleton"><img src="" alt="" class="gallery-image"></div>
+    </div>
+  </section>
 
-    <!-- Main Content Container (Matching Homepage Style) -->
-    <main class="page-container max-w-7xl mx-auto p-6 pt-12">
+  <!-- Template for a single gallery item -->
+  <template id="gallery-item-template">
+    <div class="gallery-item">
+        <img src="" loading="lazy" alt="" class="gallery-image">
+    </div>
+  </template>
 
-        <!-- Back Link -->
-        <a id="back-link" href="index.html" class="text-cyan-400 hover:text-white transition duration-300 mb-6 inline-block text-sm font-medium">&larr; Back to Collection</a>
-
-        <!-- Project Title -->
-        <h2 id="project-title" class="text-5xl font-extrabold mb-6 border-b border-gray-700 pb-3">Loading Project...</h2>
-
-        <!-- Main Image -->
-        <div class="w-full bg-gray-700 shadow-xl mb-10 border border-gray-700">
-            <img id="main-image" src="https://placehold.co/1200x600/1f2937/d1d5db?text=MAIN+PROJECT+IMAGE" alt="Main Project Image" class="w-full h-auto object-cover">
+  <div class="rl_footer4_component">
+    <div class="rl-padding-global">
+      <div class="rl-container-large project-footer-or">
+        <div class="rl-padding-section-medium">
+          <div class="footer-divider projects-or"></div>
+          <div class="w-layout-grid rl_footer4_top-wrapper project-footer-or">
+            <div id="w-node-cf49382e-fbd9-74de-5ac0-cf3d95d5b6d3-2e6c2523" class="rl_footer4_credit-text">© 2025 Hendrix. All rights reserved.</div>
+            <div id="w-node-cf49382e-fbd9-74de-5ac0-cf3d95d5b6d5-2e6c2523" class="w-layout-grid rl_footer4_social-list">
+              <a href="#" class="rl_footer4_social-link w-inline-block">
+                <div class="rl-social-icon w-embed"><svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="CurrentColor"></path>
+                  </svg></div>
+              </a>
+            </div>
+          </div>
         </div>
-
-        <!-- Project Description -->
-        <p id="project-description" class="text-gray-300 text-lg mb-12 max-w-4xl">
-            Description will load here.
-        </p>
-
-        <!-- Gallery Section -->
-        <h3 class="text-4xl font-extrabold mb-8 border-b border-gray-700 pb-3">Project Gallery</h3>
-        
-        <!-- Grid Container: Two Columns on Medium/Large Screens -->
-        <div id="gallery-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Gallery images will be injected here by script.js -->
-            <p class="text-gray-500 italic">Loading gallery images...</p>
-        </div>
-    </main>
-
-    <!-- Template for Gallery Images (Unrounded) -->
-    <template id="gallery-image-template">
-        <div class="gallery-image-wrapper border border-gray-700 shadow-lg">
-            <img src="" alt="Gallery Image" class="w-full h-full object-cover">
-        </div>
-    </template>
-
-    <!-- Footer (Matching Homepage Style) -->
-    <footer class="bg-gray-800 border-t border-gray-700 mt-12">
-        <div class="max-w-7xl mx-auto px-6 py-4 text-center text-gray-400">
-            &copy; 2025 Hendrix Portfolio. All Rights Reserved.
-        </div>
-    </footer>
-
-    <!-- Load the main application script -->
-    <script src="script.js"></script>
+      </div>
+    </div>
+  </div>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=68fa9d04f30921742342ac3a" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="js/webflow.js" type="text/javascript"></script>
+  <script src="js/supabase-logic.js" type="text/javascript"></script>
 </body>
 </html>
