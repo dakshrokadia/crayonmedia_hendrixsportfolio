@@ -17,30 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ----------------------------------------------------------------------
-    // 2. HELPER FUNCTIONS
-    // ----------------------------------------------------------------------
-
-    function updateSocialImages(imageUrl) {
-        if (!imageUrl) return;
-        let ogImageTag = document.querySelector('meta[property="og:image"]');
-        let twitterImageTag = document.querySelector('meta[name="twitter:image"]');
-        if (!ogImageTag) {
-            ogImageTag = document.createElement('meta');
-            ogImageTag.setAttribute('property', 'og:image');
-            document.head.appendChild(ogImageTag);
-        }
-        if (!twitterImageTag) {
-            twitterImageTag = document.createElement('meta');
-            twitterImageTag.setAttribute('name', 'twitter:image');
-            document.head.appendChild(twitterImageTag);
-        }
-        ogImageTag.setAttribute('content', imageUrl);
-        twitterImageTag.setAttribute('content', imageUrl);
-    }
-
-
-    // ----------------------------------------------------------------------
-    // 3. SUPABASE DATA FETCH FUNCTIONS
+    // 2. SUPABASE DATA FETCH FUNCTIONS
     // ----------------------------------------------------------------------
 
     async function fetchAllCollections() {
@@ -95,22 +72,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let landscapeIndex = 0;
         let portraitIndex = 0;
 
-        // **FIX:** Fully restructured gallery logic to permanently fix duplication bug.
+        // **FIX:** Restructured the logic to prevent fall-through and duplication.
         if (landscapeUrls.length === 0 && portraitUrls.length > 0) {
             // Case 1: Only portrait images exist.
             portraitUrls.forEach(url => galleryItems.push({ url, type: 'portrait' }));
         } else if (portraitUrls.length === 0 && landscapeUrls.length > 0) {
             // Case 2: Only landscape images exist.
             landscapeUrls.forEach(url => galleryItems.push({ url, type: 'landscape' }));
-        } else if (landscapeUrls.length > 0 && portraitUrls.length > 0) {
-            // Case 3: A mix of both image types exists.
+        } else {
+            // Case 3: A mix of images exists (or both are empty).
+            // Main loop: 1 landscape, 4 portraits
             while (landscapeIndex < landscapeUrls.length && portraitIndex < portraitUrls.length) {
                 galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
                 const portraitsToAdd = portraitUrls.slice(portraitIndex, portraitIndex + 4);
                 portraitsToAdd.forEach(url => galleryItems.push({ url, type: 'portrait' }));
                 portraitIndex += 4;
             }
-            // Add any leftovers, now safely inside this 'else' block.
+            // Add any leftovers from the main loop.
             while (landscapeIndex < landscapeUrls.length) {
                 galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
             }
@@ -118,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 galleryItems.push({ url: portraitUrls[portraitIndex++], type: 'portrait' });
             }
         }
-        // If both are empty, galleryItems will correctly remain an empty array.
         
         project.galleryItems = galleryItems;
         return project;
@@ -126,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ----------------------------------------------------------------------
-    // 4. PAGE LOGIC
+    // 3. PAGE LOGIC
     // ----------------------------------------------------------------------
 
     async function loadIndexPage() {
@@ -177,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            updateSocialImages(data.collection_page_image);
             titleElement.textContent = (data.title || 'Collection').toUpperCase();
             
             if (data.collection_page_image) {
@@ -222,8 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            updateSocialImages(project.main_image_url);
-
             if (project.main_image_url) {
                 heroBackground.style.backgroundImage = `url('${project.main_image_url}')`;
             }
@@ -257,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ----------------------------------------------------------------------
-    // 5. ROUTER
+    // 4. ROUTER
     // ----------------------------------------------------------------------
 
     function initApp() {
