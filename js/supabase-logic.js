@@ -21,10 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------------------------
 
     /**
-     * Fetches all collections for the homepage grid.
+     * Fetches all collections for the homepage grid, ordered by ID.
      */
     async function fetchAllCollections() {
-        const url = `${SUPABASE_API_BASE}collection?select=title,slug,home_page_image`;
+        // **FIX:** Added '&order=id.asc' to ensure collections are sorted correctly.
+        const url = `${SUPABASE_API_BASE}collection?select=title,slug,home_page_image&order=id.asc`;
         const response = await fetch(url, fetchOptions);
         if (!response.ok) {
             throw new Error(`Failed to fetch collections: ${response.statusText}`);
@@ -37,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} slug The collection slug from the URL.
      */
     async function fetchCollectionDetails(slug) {
-        // Fetch collection details (including the hero image)
         const collectionUrl = `${SUPABASE_API_BASE}collection?slug=eq.${encodeURIComponent(slug)}&select=id,title,collection_page_image`;
         const collectionResponse = await fetch(collectionUrl, fetchOptions);
         if (!collectionResponse.ok) {
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const collection = collectionData[0];
 
-        // Fetch projects belonging to this collection
         const projectsUrl = `${SUPABASE_API_BASE}project?collection_id=eq.${collection.id}&order=date_completed.desc&select=title,slug,date_completed,main_image_url`;
         const projectsResponse = await fetch(projectsUrl, fetchOptions);
         if (!projectsResponse.ok) {
@@ -76,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const project = data[0];
 
-        // --- Gallery Logic ---
         const parseRawLinks = (rawText) => rawText ? rawText.split(/[\n,]/).map(link => link.trim()).filter(Boolean) : [];
         const landscapeUrls = parseRawLinks(project.landscape_gallery_raw);
         const portraitUrls = parseRawLinks(project.portrait_gallery_raw);
@@ -85,24 +83,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let landscapeIndex = 0;
         let portraitIndex = 0;
 
-        // If only one type of image exists, just add them all.
         if (landscapeUrls.length === 0 && portraitUrls.length > 0) {
             portraitUrls.forEach(url => galleryItems.push({ url, type: 'portrait' }));
         } else if (portraitUrls.length === 0 && landscapeUrls.length > 0) {
             landscapeUrls.forEach(url => galleryItems.push({ url, type: 'landscape' }));
         } else {
-             // Main loop: 1 landscape, 4 portraits
             while (landscapeIndex < landscapeUrls.length && portraitIndex < portraitUrls.length) {
-                // Add one landscape
                 galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
-                // Add up to four portraits
                 const portraitsToAdd = portraitUrls.slice(portraitIndex, portraitIndex + 4);
                 portraitsToAdd.forEach(url => galleryItems.push({ url, type: 'portrait' }));
                 portraitIndex += 4;
             }
         }
         
-        // Add any leftovers
         while (landscapeIndex < landscapeUrls.length) {
             galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
         }
@@ -136,8 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const link = clone.querySelector('a');
                 
                 link.href = `collection.html?slug=${collection.slug}`;
-                link.querySelector('.collection-image').src = collection.home_page_image || '';
-                link.querySelector('.collection-heading').textContent = collection.title.toUpperCase() + ' COLLECTION';
+                const image = link.querySelector('.collection-image');
+                if (collection.home_page_image) {
+                    image.src = collection.home_page_image;
+                } else {
+                    image.style.display = 'none';
+                }
+                link.querySelector('.collection-heading').textContent = (collection.title || 'Collection').toUpperCase() + ' COLLECTION';
                 
                 container.appendChild(clone);
             });
@@ -168,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            titleElement.textContent = data.title;
+            titleElement.textContent = (data.title || 'Collection').toUpperCase();
+            
             if (data.collection_page_image) {
                 heroContainer.style.backgroundImage = `url('${data.collection_page_image}')`;
             }
@@ -214,7 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            heroBackground.style.backgroundImage = `url('${project.main_image_url}')`;
+            if (project.main_image_url) {
+                heroBackground.style.backgroundImage = `url('${project.main_image_url}')`;
+            }
             titleElement.textContent = project.title;
             titleElement.classList.remove('is-skeleton');
             dateElement.textContent = new Date(project.date_completed).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
