@@ -20,11 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. SUPABASE DATA FETCH FUNCTIONS
     // ----------------------------------------------------------------------
 
-    /**
-     * Fetches all collections for the homepage grid, ordered by ID.
-     */
     async function fetchAllCollections() {
-        // **FIX:** Added '&order=id.asc' to ensure collections are sorted correctly.
         const url = `${SUPABASE_API_BASE}collection?select=title,slug,home_page_image&order=id.asc`;
         const response = await fetch(url, fetchOptions);
         if (!response.ok) {
@@ -33,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return await response.json();
     }
 
-    /**
-     * Fetches details for a single collection and its associated projects.
-     * @param {string} slug The collection slug from the URL.
-     */
     async function fetchCollectionDetails(slug) {
         const collectionUrl = `${SUPABASE_API_BASE}collection?slug=eq.${encodeURIComponent(slug)}&select=id,title,collection_page_image`;
         const collectionResponse = await fetch(collectionUrl, fetchOptions);
@@ -59,10 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return { ...collection, projects };
     }
 
-    /**
-     * Fetches details for a single project.
-     * @param {string} slug The project slug from the URL.
-     */
     async function fetchProjectDetails(slug) {
         const url = `${SUPABASE_API_BASE}project?slug=eq.${encodeURIComponent(slug)}&select=title,date_completed,main_image_url,landscape_gallery_raw,portrait_gallery_raw`;
         const response = await fetch(url, fetchOptions);
@@ -75,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const project = data[0];
 
+        // --- Gallery Logic ---
         const parseRawLinks = (rawText) => rawText ? rawText.split(/[\n,]/).map(link => link.trim()).filter(Boolean) : [];
         const landscapeUrls = parseRawLinks(project.landscape_gallery_raw);
         const portraitUrls = parseRawLinks(project.portrait_gallery_raw);
@@ -83,24 +72,29 @@ document.addEventListener('DOMContentLoaded', () => {
         let landscapeIndex = 0;
         let portraitIndex = 0;
 
+        // **FIX:** Restructured the logic to prevent fall-through and duplication.
         if (landscapeUrls.length === 0 && portraitUrls.length > 0) {
+            // Case 1: Only portrait images exist.
             portraitUrls.forEach(url => galleryItems.push({ url, type: 'portrait' }));
         } else if (portraitUrls.length === 0 && landscapeUrls.length > 0) {
+            // Case 2: Only landscape images exist.
             landscapeUrls.forEach(url => galleryItems.push({ url, type: 'landscape' }));
         } else {
+            // Case 3: A mix of images exists (or both are empty).
+            // Main loop: 1 landscape, 4 portraits
             while (landscapeIndex < landscapeUrls.length && portraitIndex < portraitUrls.length) {
                 galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
                 const portraitsToAdd = portraitUrls.slice(portraitIndex, portraitIndex + 4);
                 portraitsToAdd.forEach(url => galleryItems.push({ url, type: 'portrait' }));
                 portraitIndex += 4;
             }
-        }
-        
-        while (landscapeIndex < landscapeUrls.length) {
-            galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
-        }
-        while (portraitIndex < portraitUrls.length) {
-            galleryItems.push({ url: portraitUrls[portraitIndex++], type: 'portrait' });
+            // Add any leftovers from the main loop.
+            while (landscapeIndex < landscapeUrls.length) {
+                galleryItems.push({ url: landscapeUrls[landscapeIndex++], type: 'landscape' });
+            }
+            while (portraitIndex < portraitUrls.length) {
+                galleryItems.push({ url: portraitUrls[portraitIndex++], type: 'portrait' });
+            }
         }
         
         project.galleryItems = galleryItems;
@@ -112,9 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. PAGE LOGIC
     // ----------------------------------------------------------------------
 
-    /**
-     * Loads collections on the homepage (index.html).
-     */
     async function loadIndexPage() {
         const container = document.getElementById('collection-list-container');
         const template = document.getElementById('collection-item-template');
@@ -122,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const collections = await fetchAllCollections();
-            container.innerHTML = ''; // Clear skeleton loaders
+            container.innerHTML = ''; 
 
             collections.forEach(collection => {
                 const clone = template.content.cloneNode(true);
@@ -145,9 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Loads a single collection's projects (collection.html).
-     */
     async function loadCollectionPage() {
         const params = new URLSearchParams(window.location.search);
         const slug = params.get('slug');
@@ -172,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroContainer.style.backgroundImage = `url('${data.collection_page_image}')`;
             }
 
-            projectContainer.innerHTML = ''; // Clear skeleton projects
+            projectContainer.innerHTML = '';
 
             data.projects.forEach(project => {
                 const clone = projectTemplate.content.cloneNode(true);
@@ -191,9 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Loads a single project's details and gallery (project.html).
-     */
     async function loadProjectPage() {
         const params = new URLSearchParams(window.location.search);
         const slug = params.get('slug');
@@ -221,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dateElement.textContent = new Date(project.date_completed).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
             dateElement.classList.remove('is-skeleton');
 
-            galleryContainer.innerHTML = ''; // Clear skeleton gallery
+            galleryContainer.innerHTML = '';
 
             project.galleryItems.forEach(item => {
                 const clone = galleryTemplate.content.cloneNode(true);
@@ -249,9 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. ROUTER
     // ----------------------------------------------------------------------
 
-    /**
-     * Checks the current page path and calls the appropriate load function.
-     */
     function initApp() {
         const path = window.location.pathname;
         if (path === '/' || path.endsWith('/index.html')) {
